@@ -1,0 +1,15 @@
+.DS_Store
+*.db
+
+.idea
+.idea/*
+.idea_modules
+
+.ensime
+.ensime_lucene
+.ensime_cache
+
+project/boot/
+target
+.history
+.lib

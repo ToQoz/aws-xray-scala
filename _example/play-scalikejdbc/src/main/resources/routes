@@ -1,0 +1,3 @@
+POST  /users app.controllers.UserController.create()
+GET  /users app.controllers.UserController.list()
+GET  /users/async app.controllers.UserController.listAsync()
