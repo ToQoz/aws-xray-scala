@@ -1,5 +1,8 @@
 import com.typesafe.sbt.packager.docker._
 
+val currentVersion = "0.0.1-SNAPSHOT"
+val currentScalaVersion = "2.12.7"
+
 val awsXRayRecorderVersion = "2.0.1"
 // Test/Example
 val mysqlConnectorJavaVersion = "8.0.13"
@@ -9,10 +12,8 @@ val slf4jApiVersion = "1.7.25"
 val scalaLoggingVersion = "3.9.0"
 
 lazy val baseSettings = Seq(
-  organization := "net.toqoz",
-  version := "0.0.1",
-  sbtPlugin := false,
-  scalaVersion := "2.12.7",
+  version := currentVersion,
+  scalaVersion := currentScalaVersion,
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Xfuture"),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   libraryDependencies ++= Seq(
@@ -20,7 +21,34 @@ lazy val baseSettings = Seq(
     // java.lang.NoClassDefFoundError: org/scalacheck/Test$TestCallback
     "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
   ),
+  sbtPlugin := false,
+  // Maven
+  organization := "net.toqoz",
+  organizationName := "toqoz",
+  organizationHomepage := Some(url("https://toqoz.net")),
+  homepage := Some(url("https://github.com/ToQoz/aws-xray-scala")),
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/ToQoz/aws-xray-scala"),
+      "scm:https://github.com/ToQoz/aws-xray-scala.git"
+    )
+  ),
+  developers := List(
+    Developer(
+      id    = "ToQoz",
+      name  = "Takatoshi Matsumoto",
+      email = "toqoz403@gmail.com",
+      url   = url("https://toqoz.net")
+    )
+  ),
+  pomIncludeRepository := { _ => false },
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (currentVersion.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
+    else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+  },
   publishMavenStyle := true,
+  // Testing
   publishArtifact in Test := false,
   parallelExecution in Test := false,
   logBuffered in Test := false
