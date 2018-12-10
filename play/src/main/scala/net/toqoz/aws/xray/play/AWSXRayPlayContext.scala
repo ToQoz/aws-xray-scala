@@ -24,11 +24,12 @@ object AWSXRayPlayContext {
     try {
       action(new TraceableExecutionContext(ec))
     } finally {
-      if (traceEntity.isDefined) {
-        stash match {
-          case Some(e) => AWSXRay.setTraceEntity(e)
-          case _       => AWSXRay.clearTraceEntity()
-        }
+      stash match {
+        case Some(e) => AWSXRay.setTraceEntity(e)
+        case _ =>
+          if (traceEntity.isDefined) {
+            AWSXRay.clearTraceEntity()
+          }
       }
     }
   }
